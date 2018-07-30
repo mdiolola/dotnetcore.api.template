@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  dotnetcore.api.template:
+    image: ${DOCKER_REGISTRY}dotnetcoreapitemplate
+    build:
+      context: .
+      dockerfile: dotnetcore.api.template/Dockerfile
