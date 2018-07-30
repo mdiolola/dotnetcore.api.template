@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetcore.api.template", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ED67BD47-8E57-4D9C-819C-745F5871152F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "master", "master", "{C62AAF39-20B4-4102-A16A-DDB3E3AF8DAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetcore.api.model.template", "master\dotnetcore.api.model.template\dotnetcore.api.model.template.csproj", "{814460FE-D95D-40AE-9B3E-8365E456A410}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetcore.api.entity.template", "master\dotnetcore.api.entity.template\dotnetcore.api.entity.template.csproj", "{78A5A1B9-2343-4BF9-8375-9EE4351C9243}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,21 @@ Global
 		{ED67BD47-8E57-4D9C-819C-745F5871152F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED67BD47-8E57-4D9C-819C-745F5871152F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED67BD47-8E57-4D9C-819C-745F5871152F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{814460FE-D95D-40AE-9B3E-8365E456A410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814460FE-D95D-40AE-9B3E-8365E456A410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814460FE-D95D-40AE-9B3E-8365E456A410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814460FE-D95D-40AE-9B3E-8365E456A410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A5A1B9-2343-4BF9-8375-9EE4351C9243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A5A1B9-2343-4BF9-8375-9EE4351C9243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A5A1B9-2343-4BF9-8375-9EE4351C9243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A5A1B9-2343-4BF9-8375-9EE4351C9243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{814460FE-D95D-40AE-9B3E-8365E456A410} = {C62AAF39-20B4-4102-A16A-DDB3E3AF8DAC}
+		{78A5A1B9-2343-4BF9-8375-9EE4351C9243} = {C62AAF39-20B4-4102-A16A-DDB3E3AF8DAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19EA3372-8DC1-425D-9251-24B5C6A72D0D}
