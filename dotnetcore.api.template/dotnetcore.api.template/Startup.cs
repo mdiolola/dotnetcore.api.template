@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text;
+using dotnetcore.api.model.template.Common;
 using dotnetcore.api.template.Data;
 using dotnetcore.api.template.Data.Interface;
 using dotnetcore.api.template.Services;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -40,30 +43,47 @@ namespace dotnetcore.api.template
                                                                            .AllowAnyHeader()));
 
 
+            //Authentication
+            services.Configure<Authenticate>(Configuration.GetSection(nameof(Authenticate)));
+
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+                {
+                    options.ClaimsIssuer = Configuration["Authenticate:Issuer"];
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Authenticate:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Authenticate:Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration["Authenticate:SecurityKey"])),
+                        ValidateLifetime = true,                       
+                        RequireExpirationTime = false,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                    options.SaveToken = true;
+                });
+
+
             services.AddMvc();
             services.AddAuthorization();
             services.AddOptions();
 
-            //Authentication
-            services.Configure<Authenticate>(Configuration.GetSection(nameof(Authenticate)));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["AuthSettings:Issuer"],
-                        ValidAudience = Configuration["AuthSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["AuthSettings:SecurityKey"]))
-                    };
-                });
+            //Configuration
+            services.Configure<Security>(Configuration.GetSection(nameof(Security)));
 
+            //Services
             services.AddScoped<IDbContext, ApiContext>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
+            services.AddTransient<IUserService, UserService>();
+
+            //Database            
+            services.AddDbContext<ApiContext>(options => options.UseSqlServer(Configuration["Database:ConnectionString"]));
 
         }
 
@@ -84,6 +104,8 @@ namespace dotnetcore.api.template
             app.UseSwaggerUI( c=>
             { c.SwaggerEndpoint("/swagger/v1/swagger.json", Assembly.GetExecutingAssembly().GetName().ToString().Split(',')[0]);
             });
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }

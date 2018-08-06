@@ -19,7 +19,6 @@ namespace dotnetcore.api.template.Services
         #region "Private Members"
 
         private readonly ApiContext _context = null;
-
         private readonly Authenticate _autheticate = null;
         private readonly Security _security = null;
 
@@ -28,11 +27,7 @@ namespace dotnetcore.api.template.Services
 
         #region "Constructors"
 
-        public AuthenticateService(
-            //IUserService clientUserService, 
-            ApiContext context, 
-            IOptions<Authenticate> authenticate,
-            IOptions<Security> security)
+        public AuthenticateService(ApiContext context, IOptions<Authenticate> authenticate, IOptions<Security> security)
         {
             this._context = context;
             this._autheticate = authenticate.Value;
@@ -69,6 +64,7 @@ namespace dotnetcore.api.template.Services
                 if (string.Equals(userEntity.Password.Decrypt(this._security.PassPhrase), password))
                 {
                     this._autheticate.Username = username;
+                    this._autheticate.DbRole = userEntity.FirstName;
                     userAuth = new UserAuth
                     {
                         Token = new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(

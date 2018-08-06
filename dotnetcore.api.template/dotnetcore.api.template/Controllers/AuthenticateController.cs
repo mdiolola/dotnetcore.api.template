@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using dotnetcore.api.model.template.Common;
 using dotnetcore.api.model.template.Constants;
 using dotnetcore.api.model.template.Users;
 using dotnetcore.api.template.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetcore.api.template.Controllers
@@ -15,7 +11,7 @@ namespace dotnetcore.api.template.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AutheticateController : ControllerBase
+    public class AuthenticateController : ControllerBase
     {
         #region "Private Members"
 
@@ -25,7 +21,7 @@ namespace dotnetcore.api.template.Controllers
 
         #region "Constructors"
 
-        public AutheticateController(IAuthenticateService authenticateService)
+        public AuthenticateController(IAuthenticateService authenticateService)
         {
             this._authenticateService = authenticateService;
         }
@@ -39,17 +35,13 @@ namespace dotnetcore.api.template.Controllers
         public HttpResponse<UserAuth> TryRequestToken([FromBody] User obj)
         {
             HttpResponse<UserAuth> response = null;
-            UserAuth auth = null;
-
+            var auth = new UserAuth();
             try
             {
                 obj.Username = obj.Username.ToLower();
 
                 if (!this._authenticateService.TryRequestToken(obj.Username, obj.Password, out auth))
-                {
-                    if (auth == null)
                         throw new CustomException(ErrorMessages.LoginInvalid);
-                }
 
                 response = new HttpResponse<UserAuth>(raw: auth);
             }

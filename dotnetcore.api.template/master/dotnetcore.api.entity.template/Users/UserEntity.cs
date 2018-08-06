@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using dotnetcore.api.model.template.Users;
 
 namespace dotnetcore.api.entity.template.Users
 {
+    [Table("Users", Schema = "Account")]
     public class UserEntity : BaseEntity<Int64, model.template.Users.User>
     {
         public string Username { get; set; }
@@ -12,6 +14,9 @@ namespace dotnetcore.api.entity.template.Users
         public string Address { get; set; }
 
         #region "Constructors"
+
+        public UserEntity() { }
+
         public UserEntity(User obj){
             this.Id = obj.Id;
             this.Username = obj.Username;
